@@ -4,7 +4,7 @@
         <Console name="SysOut" target="SYSTEM_OUT">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%c{1}/%level]: %msg%n" />
         </Console>
-        <RollingRandomAccessFile name="File" fileName="red4j/logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+        <RollingRandomAccessFile name="File" fileName="red4j/logs/latest.log" filePattern="red4j/logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%c{1}/%level]: %msg%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />

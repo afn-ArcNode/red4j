@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 public class RED4J {
     private static Logger logger;
 
-    public static void initialize() throws IOException {
+    public static boolean initialize() throws IOException {
         // Inject dependencies
         try {
             ClassLoader loader = RED4J.class.getClassLoader();
@@ -25,5 +25,7 @@ public class RED4J {
 
         logger = LoggerFactory.getLogger("RED4J");
         logger.info("Classpath injection completed");
+
+        return Heck.load(logger);
     }
 }

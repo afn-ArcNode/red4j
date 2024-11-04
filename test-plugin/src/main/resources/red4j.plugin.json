@@ -1,0 +1,4 @@
+{
+  "name": "Test",
+  "main": "cn.afternode.red4j.test.TestPlugin"
+}

@@ -21,7 +21,7 @@ bool InitUtils(JNIEnv *env) {
 
 
 void LogJVMException(JNIEnv *env) {
-    jobject except = env->ExceptionOccurred();
+    jthrowable except = env->ExceptionOccurred();
     auto str = (jstring) env->CallStaticObjectMethod(cl_String, mt_String_valueOf_Object, except);
 
     jboolean isCopy;

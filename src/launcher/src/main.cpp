@@ -89,7 +89,7 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle aHandle, RED4ext::
                     }
                     return false;
                 }
-                jmethodID initMethod = env->GetStaticMethodID(cl, "initialize", "()V");
+                jmethodID initMethod = env->GetStaticMethodID(cl, "initialize", "()Z");
                 if (initMethod == nullptr) {
                     aSdk->logger->Error(aHandle, "Failed to find initialize method");
                     if (env->ExceptionCheck()) {
@@ -97,8 +97,15 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle aHandle, RED4ext::
                     }
                     return false;
                 }
-                env->CallStaticVoidMethod(cl, initMethod);
-                aSdk->logger->Info(plugin, "Initialization completed");
+                if (env->CallStaticBooleanMethod(cl, initMethod)) {
+                    aSdk->logger->Info(plugin, "Initialization completed");
+                } else {
+                    if (env->ExceptionCheck()) {
+                        LogJVMException(env);
+                    }
+                    aSdk->logger->Critical(plugin, "Java initialization failed, see bin/x64/red4j/logs");
+                    return false;
+                }
             } else {
                 aSdk->logger->ErrorF(aHandle, "Failed to initialize JVM: %ld", result);
                 return false;

@@ -20,11 +20,11 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    implementation project(":api")
+    api project(":api")
 
     // Logging
-    implementation libs.log4j.core
-    implementation libs.log4j.slf4j2
+    compileOnly libs.log4j.core
+    compileOnly libs.log4j.slf4j2
 }
 
 test {
@@ -32,16 +32,18 @@ test {
 }
 
 task copyDepsToDist(type: Copy) {
-    from configurations.compileClasspath
+    from configurations.compileClasspath.filter { it.getName().endsWith(".jar") }
     into "dist"
 }
 
 task dist(group: "build") {
+    dependsOn ":api:build"
     dependsOn ":build"
     dependsOn ":copyDepsToDist"
 
     doLast {
-        def output = project.projectDir.toPath().resolve("dist/red4j.jar")
-        Files.copy(projectDir.toPath().resolve("build/libs/red4j-${project.version}.jar"), output, StandardCopyOption.REPLACE_EXISTING)
+        def output = rootProject.projectDir.toPath().resolve("dist")
+        Files.copy(rootProject.projectDir.toPath().resolve("build/libs/red4j-${project.version}.jar"), output.resolve("red4j.jar"), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(project(":api").projectDir.toPath().resolve("build/libs/api-${project.version}.jar"), output.resolve("red4j-api.jar"), StandardCopyOption.REPLACE_EXISTING)
     }
 }
