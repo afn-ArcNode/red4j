@@ -1,0 +1,47 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+
+allprojects {
+    group = 'zyklone'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation project(":api")
+
+    // Logging
+    implementation libs.log4j.core
+    implementation libs.log4j.slf4j2
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task copyDepsToDist(type: Copy) {
+    from configurations.compileClasspath
+    into "dist"
+}
+
+task dist(group: "build") {
+    dependsOn ":build"
+    dependsOn ":copyDepsToDist"
+
+    doLast {
+        def output = project.projectDir.toPath().resolve("dist/red4j.jar")
+        Files.copy(projectDir.toPath().resolve("build/libs/red4j-${project.version}.jar"), output, StandardCopyOption.REPLACE_EXISTING)
+    }
+}

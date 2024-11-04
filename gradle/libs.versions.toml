@@ -1,0 +1,8 @@
+[versions]
+log4j = "2.24.1"
+slf4j = "2.0.16"
+
+[libraries]
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-slf4j2 = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
